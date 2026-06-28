@@ -1,0 +1,61 @@
+# CMake
+CMakeCache.txt
+CMakeFiles/
+CMakeScripts/
+Testing/
+Makefile
+cmake_install.cmake
+install_manifest.txt
+compile_commands.json
+CTestTestfile.cmake
+_deps/
+
+# Build Directories
+out/
+build/
+bin/
+lib/
+
+# Compiled Object files
+*.slo
+*.lo
+*.o
+*.obj
+
+# Compiled Dynamic libraries
+*.so
+*.dylib
+*.dll
+
+# Compiled Static libraries
+*.lai
+*.la
+*.a
+*.lib
+
+# Executables
+*.exe
+*.out
+*.app
+
+# Debugging and linking files
+*.pdb
+*.ilk
+*.exp
+
+# Visual Studio / Visual Studio Code
+.vs/
+.vscode/
+*.sln
+*.suo
+*.user
+*.vcxproj
+*.vcxproj.filters
+*.vcxproj.user
+
+# Package Managers
+vcpkg_installed/
+
+# OS generated files
+.DS_Store
+Thumbs.db
