@@ -18,7 +18,7 @@ void VulkanContext::createInstance() {
 		VK_API_VERSION_1_4
 	);
 
-	uint32_t           sdlExtensionCount = 0;
+	uint32_t sdlExtensionCount = 0;
 	const char* const* sdlExtensions     = SDL_Vulkan_GetInstanceExtensions(&sdlExtensionCount);
 
 	if (!sdlExtensions) {
@@ -99,7 +99,7 @@ void VulkanContext::createLogicalDevice() {
 	}
 
 	std::vector<vk::DeviceQueueCreateInfo> queueCreateInfos;
-	std::set<uint32_t>                     uniqueQueueFamilies = { indices.graphicsFamily.value(), indices.presentFamily.value() };
+	std::set<uint32_t> uniqueQueueFamilies = { indices.graphicsFamily.value(), indices.presentFamily.value() };
 
 	float queuePriority = 1.0f;
 	for (uint32_t queueFamily : uniqueQueueFamilies) {
@@ -141,9 +141,9 @@ void VulkanContext::createLogicalDevice() {
 void VulkanContext::createAllocator() {
 	VmaAllocatorCreateInfo allocatorInfo = {};
 	allocatorInfo.vulkanApiVersion = VK_API_VERSION_1_4;
-	allocatorInfo.physicalDevice = *physicalDevice;
-	allocatorInfo.device = *device;
-	allocatorInfo.instance = *instance;
+	allocatorInfo.physicalDevice   = *physicalDevice;
+	allocatorInfo.device           = *device;
+	allocatorInfo.instance         = *instance;
 
 	if (vmaCreateAllocator(&allocatorInfo, &allocator.handle) != VK_SUCCESS) {
 		throw std::runtime_error("Failed to create VMA Allocator!");

@@ -36,11 +36,11 @@ bool Application::resizeEventWatcher(void* userdata, SDL_Event* event) {
 }
 
 void Application::initVulkan() {
-	ctx = std::make_unique<VulkanContext>(window.get());
-	swapchain = std::make_unique<Swapchain>(*ctx, width, height);
-	pipeline = std::make_unique<Pipeline>(*ctx, swapchain->imageFormat);
-	commandContext = std::make_unique<CommandContext>(*ctx, MAX_FRAMES_IN_FLIGHT, swapchain->images.size());
-	meshBuffer = std::make_unique<MeshBuffer>(*ctx, commandContext->commandPool);
+	ctx 			= std::make_unique<VulkanContext>(window.get());
+	swapchain 		= std::make_unique<Swapchain>(*ctx, width, height);
+	pipeline 		= std::make_unique<Pipeline>(*ctx, swapchain->imageFormat);
+	commandContext 	= std::make_unique<CommandContext>(*ctx, MAX_FRAMES_IN_FLIGHT, swapchain->images.size());
+	meshBuffer 		= std::make_unique<MeshBuffer>(*ctx, commandContext->commandPool);
 }
 
 void Application::recreateSwapchain() {
@@ -58,10 +58,10 @@ void Application::recreateSwapchain() {
 }
 
 void Application::mainLoop() {
-	bool      running = true;
+	bool running = true;
 	SDL_Event event;
 
-	int         numkeys;
+	int numkeys;
 	const bool* state = SDL_GetKeyboardState(&numkeys);
 
 	std::cout << std::endl;

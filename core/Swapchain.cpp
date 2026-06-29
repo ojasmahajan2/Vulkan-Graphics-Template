@@ -65,11 +65,11 @@ void Swapchain::createSwapchain(VulkanContext& ctx, uint32_t width, uint32_t hei
 		createInfo.imageSharingMode = vk::SharingMode::eExclusive;
 	}
 
-	createInfo.preTransform = capabilities.currentTransform;
-	createInfo.compositeAlpha = vk::CompositeAlphaFlagBitsKHR::eOpaque;
-	createInfo.presentMode = presentMode;
-	createInfo.clipped = VK_TRUE;
-	createInfo.oldSwapchain = *swapchain;
+	createInfo.preTransform 	= capabilities.currentTransform;
+	createInfo.compositeAlpha 	= vk::CompositeAlphaFlagBitsKHR::eOpaque;
+	createInfo.presentMode 		= presentMode;
+	createInfo.clipped 			= VK_TRUE;
+	createInfo.oldSwapchain 	= *swapchain;
 
 	swapchain = vk::raii::SwapchainKHR(ctx.device, createInfo);
 	images = swapchain.getImages();
