@@ -58,10 +58,10 @@ void Application::recreateSwapchain() {
 }
 
 void Application::mainLoop() {
-	bool running = true;
+	bool      running = true;
 	SDL_Event event;
 
-	int numkeys;
+	int         numkeys;
 	const bool* state = SDL_GetKeyboardState(&numkeys);
 
 	std::cout << std::endl;

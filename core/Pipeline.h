@@ -8,8 +8,8 @@ struct pushConstantData {
 
 class Pipeline {
 public:
-	vk::raii::PipelineLayout layout = nullptr;
-	vk::raii::Pipeline graphicsPipeline = nullptr;
+	vk::raii::PipelineLayout layout           = nullptr;
+	vk::raii::Pipeline       graphicsPipeline = nullptr;
 
 	Pipeline(VulkanContext& ctx, vk::Format swapchainImageFormat);
 

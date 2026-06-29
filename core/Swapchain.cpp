@@ -13,16 +13,16 @@ void Swapchain::recreate(VulkanContext& ctx, uint32_t width, uint32_t height) {
 }
 
 void Swapchain::createSwapchain(VulkanContext& ctx, uint32_t width, uint32_t height) {
-	vk::SurfaceCapabilitiesKHR capabilities = ctx.physicalDevice.getSurfaceCapabilitiesKHR(*ctx.surface);
-	std::vector<vk::SurfaceFormatKHR> formats = ctx.physicalDevice.getSurfaceFormatsKHR(*ctx.surface);
-	std::vector<vk::PresentModeKHR> presentModes = ctx.physicalDevice.getSurfacePresentModesKHR(*ctx.surface);
+	vk::SurfaceCapabilitiesKHR        capabilities = ctx.physicalDevice.getSurfaceCapabilitiesKHR(*ctx.surface);
+	std::vector<vk::SurfaceFormatKHR> formats      = ctx.physicalDevice.getSurfaceFormatsKHR(*ctx.surface);
+	std::vector<vk::PresentModeKHR>   presentModes = ctx.physicalDevice.getSurfacePresentModesKHR(*ctx.surface);
 
 	vk::SurfaceFormatKHR surfaceFormat = formats[0];
 	for (const auto& availableFormat : formats) {
 		if (availableFormat.format == vk::Format::eB8G8R8A8Srgb &&
 			availableFormat.colorSpace == vk::ColorSpaceKHR::eSrgbNonlinear) {
-			surfaceFormat = availableFormat;
-			break;
+	 surfaceFormat = availableFormat;
+	 break;
 		}
 	}
 	imageFormat = surfaceFormat.format;
@@ -30,8 +30,8 @@ void Swapchain::createSwapchain(VulkanContext& ctx, uint32_t width, uint32_t hei
 	vk::PresentModeKHR presentMode = vk::PresentModeKHR::eFifo;
 	for (const auto& availablePresentMode : presentModes) {
 		if (availablePresentMode == vk::PresentModeKHR::eFifo) {
-			presentMode = availablePresentMode;
-			break;
+	 presentMode = availablePresentMode;
+	 break;
 		}
 	}
 

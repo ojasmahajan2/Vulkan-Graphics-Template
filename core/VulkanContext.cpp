@@ -18,8 +18,8 @@ void VulkanContext::createInstance() {
 		VK_API_VERSION_1_4
 	);
 
-	uint32_t sdlExtensionCount = 0;
-	const char* const* sdlExtensions = SDL_Vulkan_GetInstanceExtensions(&sdlExtensionCount);
+	uint32_t           sdlExtensionCount = 0;
+	const char* const* sdlExtensions     = SDL_Vulkan_GetInstanceExtensions(&sdlExtensionCount);
 
 	if (!sdlExtensions) {
 		throw std::runtime_error("Failed to get SDL Vulkan extensions: " + std::string(SDL_GetError()));
@@ -99,7 +99,7 @@ void VulkanContext::createLogicalDevice() {
 	}
 
 	std::vector<vk::DeviceQueueCreateInfo> queueCreateInfos;
-	std::set<uint32_t> uniqueQueueFamilies = { indices.graphicsFamily.value(), indices.presentFamily.value() };
+	std::set<uint32_t>                     uniqueQueueFamilies = { indices.graphicsFamily.value(), indices.presentFamily.value() };
 
 	float queuePriority = 1.0f;
 	for (uint32_t queueFamily : uniqueQueueFamilies) {

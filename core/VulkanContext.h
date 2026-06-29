@@ -43,15 +43,15 @@ class VulkanContext {
 public:
 	SDL_InitRAII initSDL{ SDL_INIT_VIDEO };
 
-	vk::raii::Context context;
-	vk::raii::Instance instance = nullptr;
-	vk::raii::SurfaceKHR surface = nullptr;
+	vk::raii::Context        context;
+	vk::raii::Instance       instance       = nullptr;
+	vk::raii::SurfaceKHR     surface        = nullptr;
 	vk::raii::PhysicalDevice physicalDevice = nullptr;
-	vk::raii::Device device = nullptr;
-	vk::raii::Queue graphicsQueue = nullptr;
-	vk::raii::Queue presentQueue = nullptr;
-	QueueFamilyIndices indices;
-	VMAWrapper allocator;
+	vk::raii::Device         device         = nullptr;
+	vk::raii::Queue          graphicsQueue  = nullptr;
+	vk::raii::Queue          presentQueue   = nullptr;
+	QueueFamilyIndices       indices;
+	VMAWrapper               allocator;
 
 	VulkanContext(SDL_Window* window);
 

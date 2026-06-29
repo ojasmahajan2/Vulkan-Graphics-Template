@@ -1,8 +1,8 @@
 #include "Pipeline.h"
 
 Pipeline::Pipeline(VulkanContext& ctx, vk::Format swapchainImageFormat) {
-	std::string shaderCode = readShaderFile(shaderPath);
-	std::vector<uint32_t> vertSpirv = compileShadersToSPIRV(shaderCode, "vertexMain");
+	std::string           shaderCode = readShaderFile(shaderPath);
+	std::vector<uint32_t> vertSpirv  = compileShadersToSPIRV(shaderCode, "vertexMain");
 	std::cout << "Vertex Shader compiled successfully" << std::endl;
 
 	std::vector<uint32_t> fragSpirv = compileShadersToSPIRV(shaderCode, "fragmentMain");
@@ -23,7 +23,7 @@ Pipeline::Pipeline(VulkanContext& ctx, vk::Format swapchainImageFormat) {
 	vk::PipelineDynamicStateCreateInfo dynamicStateInfo({}, dynamicStates);
 	vk::PipelineViewportStateCreateInfo viewportState({}, 1, nullptr, 1, nullptr);
 
-	auto bindingDescription = Vertex::getBindingDescription();
+	auto bindingDescription    = Vertex::getBindingDescription();
 	auto attributeDescriptions = Vertex::getAttributeDescriptions();
 	vk::PipelineVertexInputStateCreateInfo vertexInputInfo(
 		{}, 1, &bindingDescription,
@@ -111,7 +111,7 @@ std::vector<uint32_t> Pipeline::compileShadersToSPIRV(const std::string& shaderS
 		throw std::runtime_error("Failed to find entry point '" + std::string(entryPointName) + "' in Shader file!");
 	}
 
-	std::vector<slang::IComponentType*> components = { module, entryPoint };
+	std::vector<slang::IComponentType*>  components = { module, entryPoint };
 	Slang::ComPtr<slang::IComponentType> program;
 	session->createCompositeComponentType(
 		components.data(), components.size(), program.writeRef(), diagnosticBlob.writeRef()
@@ -125,7 +125,7 @@ std::vector<uint32_t> Pipeline::compileShadersToSPIRV(const std::string& shaderS
 	}
 
 	const uint32_t* codeStart = (const uint32_t*)spirvBlob->getBufferPointer();
-	size_t codeSize = spirvBlob->getBufferSize() / sizeof(uint32_t);
+	size_t          codeSize  = spirvBlob->getBufferSize() / sizeof(uint32_t);
 
 	return std::vector<uint32_t>(codeStart, codeStart + codeSize);
 }

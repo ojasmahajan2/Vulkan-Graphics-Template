@@ -1,10 +1,10 @@
 cmake_minimum_required(VERSION 3.20)
-project(VulkanTriangle LANGUAGES CXX)
+project(VulkanTEMPLATE LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-add_executable(VulkanTriangle
+add_executable(VulkanTEMPLATE
     main.cpp
         app/Application.cpp
         core/VulkanContext.cpp
@@ -16,7 +16,7 @@ add_executable(VulkanTriangle
 
 find_package(Vulkan REQUIRED)
 
-target_include_directories(VulkanTriangle PRIVATE
+target_include_directories(VulkanTEMPLATE PRIVATE
     ${CMAKE_SOURCE_DIR}/
         ${CMAKE_SOURCE_DIR}/app
         ${CMAKE_SOURCE_DIR}/core
@@ -24,23 +24,23 @@ target_include_directories(VulkanTriangle PRIVATE
         $ENV{VULKAN_SDK}/Include/slang
 )
 
-target_link_directories(VulkanTriangle PRIVATE
+target_link_directories(VulkanTEMPLATE PRIVATE
     $ENV{VULKAN_SDK}/Lib
 )
 
-target_link_libraries(VulkanTriangle PRIVATE
+target_link_libraries(VulkanTEMPLATE PRIVATE
     Vulkan::Vulkan
         sdl3
         slang
 )
 
-add_custom_command(TARGET VulkanTriangle POST_BUILD
+add_custom_command(TARGET VulkanTEMPLATE POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_if_different
         "$ENV{VULKAN_SDK}/Bin/SDL3.dll"
         "$ENV{VULKAN_SDK}/Bin/slang.dll"
         "$ENV{VULKAN_SDK}/Bin/slang-compiler.dll"
-        $<TARGET_FILE_DIR:VulkanTriangle>
+        $<TARGET_FILE_DIR:VulkanTEMPLATE>
     COMMAND ${CMAKE_COMMAND} -E copy_directory
         "${CMAKE_CURRENT_SOURCE_DIR}/shaders"
-        "$<TARGET_FILE_DIR:VulkanTriangle>/shaders"
+        "$<TARGET_FILE_DIR:VulkanTEMPLATE>/shaders"
 )

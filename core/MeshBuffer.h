@@ -2,9 +2,9 @@
 #include "VulkanContext.h"
 
 struct VMABuffer {
-	VkBuffer buffer = nullptr;
+	VkBuffer      buffer     = nullptr;
 	VmaAllocation allocation = nullptr;
-	VmaAllocator allocator = nullptr;
+	VmaAllocator  allocator  = nullptr;
 
 	VMABuffer() = default;
 
@@ -40,7 +40,7 @@ public:
 	VMABuffer indexBuffer;
 
 	MeshBuffer(VulkanContext& ctx, vk::raii::CommandPool& commandPool);
-	std::vector<Vertex> vertices = {};
+	std::vector<Vertex>   vertices    = {};
 	std::vector<uint32_t> vertIndices = {};
 
 	void loadMesh(const std::vector<Vertex>& newVertices, const std::vector<uint32_t>& newIndices);
