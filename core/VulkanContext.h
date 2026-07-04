@@ -1,27 +1,6 @@
 #pragma once
+
 #include "headers.h"
-
-struct SDL_InitRAII {
-	SDL_InitRAII(SDL_InitFlags flag) {
-		if (!SDL_Init(flag)) {
-			throw std::runtime_error("Failed to initiate SDL3: " + std::string(SDL_GetError()));
-		}
-	}
-
-	~SDL_InitRAII() {
-		SDL_Quit();
-		std::cout << "SDL3 Utility cleared" << std::endl;
-	}
-
-	SDL_InitRAII(const SDL_InitRAII&) = delete;
-	SDL_InitRAII& operator=(const SDL_InitRAII&) = delete;
-};
-
-struct SDL_WindowRAII {
-	void operator()(SDL_Window* w) const {
-		if (w) SDL_DestroyWindow(w);
-	}
-};
 
 struct QueueFamilyIndices {
 	std::optional<uint32_t> graphicsFamily;
@@ -41,8 +20,6 @@ struct VMAWrapper {
 
 class VulkanContext {
 public:
-	SDL_InitRAII initSDL{ SDL_INIT_VIDEO };
-
 	vk::raii::Context        context;
 	vk::raii::Instance       instance       = nullptr;
 	vk::raii::SurfaceKHR     surface        = nullptr;
@@ -52,13 +29,15 @@ public:
 	vk::raii::Queue          presentQueue   = nullptr;
 	QueueFamilyIndices       indices;
 	VMAWrapper               allocator;
+	vk::raii::DescriptorPool descriptorPool = nullptr;
 
-	VulkanContext(SDL_Window* window);
+	VulkanContext(SDL_Window* window, const std::string& instanceName);
 
 private:
-	void createInstance();
+	void createInstance(const std::string& instanceName);
 	void createSurface(SDL_Window* window);
 	void pickPhysicalDevice();
 	void createLogicalDevice();
 	void createAllocator();
+	void createDescriptorPool();
 };

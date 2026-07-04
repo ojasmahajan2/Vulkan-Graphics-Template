@@ -3,13 +3,14 @@
 #include "MeshBuffer.h"
 
 struct pushConstantData {
-	glm::mat4 mvp;
+	glm::mat4 model;
 };
 
 class Pipeline {
 public:
-	vk::raii::PipelineLayout layout           = nullptr;
 	vk::raii::Pipeline       graphicsPipeline = nullptr;
+	vk::raii::PipelineLayout layout           = nullptr;
+	vk::raii::DescriptorSetLayout descriptorSetLayout = nullptr;
 
 	Pipeline(VulkanContext& ctx, vk::Format swapchainImageFormat);
 

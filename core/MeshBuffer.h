@@ -39,36 +39,13 @@ public:
 	VMABuffer vertexBuffer;
 	VMABuffer indexBuffer;
 
-	MeshBuffer(VulkanContext& ctx, vk::raii::CommandPool& commandPool);
+	MeshBuffer(VulkanContext& ctx, vk::raii::CommandPool& commandPool, const std::vector<Vertex>& vertices, const std::vector<uint32_t>& indices);
+	
 	std::vector<Vertex>   vertices    = {};
 	std::vector<uint32_t> vertIndices = {};
 
 	void loadMesh(const std::vector<Vertex>& newVertices, const std::vector<uint32_t>& newIndices);
 
 private:
-
-	void createVertexBuffer(VulkanContext& ctx, vk::raii::CommandPool& commandPool);
-	void createIndexBuffer(VulkanContext& ctx, vk::raii::CommandPool& commandPool);
-
-	std::vector<Vertex> rect1 = {
-		{{ 0.5f, -0.5f},	{1.0f, 0.0f, 0.0f}},
-		{{ 0.5f,  0.5f},	{0.0f, 1.0f, 0.0f}},
-		{{-0.5f,  0.5f},	{0.0f, 0.0f, 1.0f}},
-		{{-0.5f, -0.5f},	{1.0f, 1.0f, 1.0f}}
-	};
-	std::vector<uint32_t> rect1Indices = {
-		0, 1, 2,
-		2, 3, 0
-	};
-
-	/*std::vector<Vertex> rect2 = {
-		{{ 0.5f, -0.5f},	{1.0f, 0.0f, 0.0f}},
-		{{ 0.5f,  0.5f},		{0.0f, 1.0f, 0.0f}},
-		{{-0.5f,  0.5f},	{0.0f, 0.0f, 1.0f}},
-		{{-0.5f, -0.5f},	{1.0f, 1.0f, 1.0f}}
-	};
-	std::vector<uint32_t> rect2Indices = {
-		0, 1, 2,
-		2, 3, 0
-	};*/
+	void uploadBuffers(VulkanContext& ctx, vk::raii::CommandPool& commandPool);
 };

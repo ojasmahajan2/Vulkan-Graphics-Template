@@ -21,8 +21,8 @@ void Swapchain::createSwapchain(VulkanContext& ctx, uint32_t width, uint32_t hei
 	for (const auto& availableFormat : formats) {
 		if (availableFormat.format == vk::Format::eB8G8R8A8Srgb &&
 			availableFormat.colorSpace == vk::ColorSpaceKHR::eSrgbNonlinear) {
-	 surfaceFormat = availableFormat;
-	 break;
+			 surfaceFormat = availableFormat;
+			 break;
 		}
 	}
 	imageFormat = surfaceFormat.format;
@@ -30,8 +30,8 @@ void Swapchain::createSwapchain(VulkanContext& ctx, uint32_t width, uint32_t hei
 	vk::PresentModeKHR presentMode = vk::PresentModeKHR::eFifo;
 	for (const auto& availablePresentMode : presentModes) {
 		if (availablePresentMode == vk::PresentModeKHR::eFifo) {
-	 presentMode = availablePresentMode;
-	 break;
+			 presentMode = availablePresentMode;
+			 break;
 		}
 	}
 
@@ -65,8 +65,13 @@ void Swapchain::createSwapchain(VulkanContext& ctx, uint32_t width, uint32_t hei
 		createInfo.imageSharingMode = vk::SharingMode::eExclusive;
 	}
 
+	vk::CompositeAlphaFlagBitsKHR compositeAlpha = vk::CompositeAlphaFlagBitsKHR::eOpaque;
+	if (capabilities.supportedCompositeAlpha & vk::CompositeAlphaFlagBitsKHR::ePreMultiplied) {
+		compositeAlpha = vk::CompositeAlphaFlagBitsKHR::ePreMultiplied;
+	}
+
 	createInfo.preTransform 	= capabilities.currentTransform;
-	createInfo.compositeAlpha 	= vk::CompositeAlphaFlagBitsKHR::eOpaque;
+	createInfo.compositeAlpha 	= compositeAlpha;
 	createInfo.presentMode 		= presentMode;
 	createInfo.clipped 			= VK_TRUE;
 	createInfo.oldSwapchain 	= *swapchain;

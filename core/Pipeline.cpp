@@ -45,8 +45,14 @@ Pipeline::Pipeline(VulkanContext& ctx, vk::Format swapchainImageFormat) {
 	);
 	vk::PipelineColorBlendStateCreateInfo colorBlending({}, VK_FALSE, vk::LogicOp::eCopy, 1, &colorBlendAttachment);
 
+	vk::DescriptorSetLayoutBinding uboLayoutBinding(
+		0, vk::DescriptorType::eUniformBuffer, 1, vk::ShaderStageFlagBits::eVertex, nullptr
+	);
+	vk::DescriptorSetLayoutCreateInfo descriptorLayoutInfo({}, 1, &uboLayoutBinding);
+	descriptorSetLayout = vk::raii::DescriptorSetLayout(ctx.device, descriptorLayoutInfo);
+
 	vk::PushConstantRange pushRange(vk::ShaderStageFlagBits::eVertex, 0, sizeof(pushConstantData));
-	vk::PipelineLayoutCreateInfo pipelineLayoutInfo({}, 0, nullptr, 1, &pushRange);
+	vk::PipelineLayoutCreateInfo pipelineLayoutInfo({}, 1, &*descriptorSetLayout, 1, &pushRange);
 	layout = vk::raii::PipelineLayout(ctx.device, pipelineLayoutInfo);
 
 	vk::PipelineRenderingCreateInfo pipelineRenderingInfo(0, 1, &swapchainImageFormat);
@@ -64,11 +70,14 @@ Pipeline::Pipeline(VulkanContext& ctx, vk::Format swapchainImageFormat) {
 
 std::string Pipeline::readShaderFile(const std::string& filename) {
 	std::ifstream shadersFile(filename);
+
 	if (!shadersFile.is_open()) {
 		throw std::runtime_error("Failed to open Shader file: " + filename);
 	}
+
 	std::stringstream buffer;
 	buffer << shadersFile.rdbuf();
+
 	return buffer.str();
 }
 

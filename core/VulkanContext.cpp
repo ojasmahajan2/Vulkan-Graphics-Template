@@ -1,17 +1,18 @@
 #define VMA_IMPLEMENTATION
 #include "VulkanContext.h"
 
-VulkanContext::VulkanContext(SDL_Window* window) {
-	createInstance();
+VulkanContext::VulkanContext(SDL_Window* window, const std::string& instanceName) {
+	createInstance(instanceName);
 	createSurface(window);
 	pickPhysicalDevice();
 	createLogicalDevice();
 	createAllocator();
+	createDescriptorPool();
 }
 
-void VulkanContext::createInstance() {
+void VulkanContext::createInstance(const std::string& instanceName) {
 	vk::ApplicationInfo appInfo(
-		"Vulkan Subject",
+		instanceName.c_str(),
 		VK_MAKE_VERSION(1, 0, 0),
 		"Basic Engine",
 		VK_MAKE_VERSION(1, 0, 0),
@@ -19,7 +20,7 @@ void VulkanContext::createInstance() {
 	);
 
 	uint32_t sdlExtensionCount = 0;
-	const char* const* sdlExtensions     = SDL_Vulkan_GetInstanceExtensions(&sdlExtensionCount);
+	const char* const* sdlExtensions = SDL_Vulkan_GetInstanceExtensions(&sdlExtensionCount);
 
 	if (!sdlExtensions) {
 		throw std::runtime_error("Failed to get SDL Vulkan extensions: " + std::string(SDL_GetError()));
@@ -61,20 +62,41 @@ void VulkanContext::pickPhysicalDevice() {
 
 	std::cout << "Found " << devices.size() << " GPUs with Vulkan support" << std::endl;
 
+	const char* requiredExtension = VK_KHR_SWAPCHAIN_EXTENSION_NAME;
+	auto isDeviceSuitable = [&](const vk::raii::PhysicalDevice& device) {
+		std::vector<vk::ExtensionProperties> availableExtensions = device.enumerateDeviceExtensionProperties();
+		bool hasSwapchain = false;
+		for (const auto& ext : availableExtensions) {
+			if (strcmp(ext.extensionName, requiredExtension) == 0) {
+				hasSwapchain = true;
+				break;
+			}
+		}
+		return hasSwapchain;
+	};
+
 	for (const auto& d : devices) {
 		vk::PhysicalDeviceProperties properties = d.getProperties();
 
-		if (properties.deviceType == vk::PhysicalDeviceType::eDiscreteGpu) {
+		if (properties.deviceType == vk::PhysicalDeviceType::eDiscreteGpu && isDeviceSuitable(d)) {
 			physicalDevice = d;
 			std::cout << "Selected GPU: " << properties.deviceName << std::endl;
-
 			break;
 		}
 	}
 
 	if (!*physicalDevice) {
-		physicalDevice = devices.front();
-		std::cout << "Fallback GPU Selected: " << physicalDevice.getProperties().deviceName << std::endl;
+		for (const auto& d : devices) {
+			if (isDeviceSuitable(d)) {
+				physicalDevice = d;
+				std::cout << "Fallback GPU Selected: " << d.getProperties().deviceName << std::endl;
+				break;
+			}
+		}
+	}
+
+	if (!*physicalDevice) {
+		throw std::runtime_error("No suitable GPU found that supports the required extensions!");
 	}
 }
 
@@ -148,4 +170,17 @@ void VulkanContext::createAllocator() {
 	if (vmaCreateAllocator(&allocatorInfo, &allocator.handle) != VK_SUCCESS) {
 		throw std::runtime_error("Failed to create VMA Allocator!");
 	}
+}
+
+void VulkanContext::createDescriptorPool() {
+	std::array<vk::DescriptorPoolSize, 1> poolSizes = {
+		vk::DescriptorPoolSize(vk::DescriptorType::eUniformBuffer, 10)
+	};
+
+	vk::DescriptorPoolCreateInfo poolInfo(
+		vk::DescriptorPoolCreateFlagBits::eFreeDescriptorSet,
+		10, poolSizes
+	);
+
+	descriptorPool = vk::raii::DescriptorPool(device, poolInfo);
 }

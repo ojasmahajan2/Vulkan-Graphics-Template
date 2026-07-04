@@ -16,9 +16,16 @@ struct FSInput
     float3 color : COLOR;
 };
 
+struct CameraData
+{
+    float4x4 projectionView;
+};
+
+ConstantBuffer<CameraData> camera : register(b0, space0);
+
 struct PushConstants
 {
-    float4x4 mvp;
+    float4x4 model;
 };
 
 [[vk::push_constant]]
@@ -28,12 +35,13 @@ ConstantBuffer<PushConstants> pc;
 VSOutput vertexMain(VSInput input)
 {
     VSOutput output;
-    
+
     float4 localPosition = float4(input.position, 0.0, 1.0);
-    
-    output.pos = mul(pc.mvp, localPosition);
+
+    float4 worldPosition = mul(localPosition, pc.model);
+    output.pos = mul(worldPosition, camera.projectionView);
     output.color = input.color;
-    
+
     return output;
 }
 
