@@ -4,12 +4,16 @@ static void framebuffer_size_callback(GLFWwindow* window, int width, int height)
     glViewport(0, 0, width, height);
     auto* app = static_cast<Application*>(glfwGetWindowUserPointer(window));
     if (app) {
+        glClearColor(0.1f, 0.1f, 0.2f, 0.5f);
+        glClear(GL_COLOR_BUFFER_BIT);
+
         for (Layer* layer : app->getLayers()) {
             layer->onUpdate(0.0f);
         }
         for (Layer* layer : app->getLayers()) {
             layer->onRender();
         }
+
         glfwSwapBuffers(window);
     }
 }
@@ -17,12 +21,16 @@ static void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 static void window_refresh_callback(GLFWwindow* window) {
     auto* app = static_cast<Application*>(glfwGetWindowUserPointer(window));
     if (app) {
+        glClearColor(0.1f, 0.1f, 0.2f, 0.5f);
+        glClear(GL_COLOR_BUFFER_BIT);
+
         for (Layer* layer : app->getLayers()) {
             layer->onUpdate(0.0f);
         }
         for (Layer* layer : app->getLayers()) {
             layer->onRender();
         }
+
         glfwSwapBuffers(window);
     }
 }
