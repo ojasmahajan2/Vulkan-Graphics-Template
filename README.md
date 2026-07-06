@@ -1,4 +1,4 @@
-# 📖 Vulkan Graphics Template — Complete Documentation
+# Vulkan Graphics Template
 
 > **Audience:** Beginners to intermediate C++ developers who want to understand a real-world Vulkan rendering engine.
 > Every concept is explained from first principles — no prior Vulkan or GPU knowledge is assumed.
